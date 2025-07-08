@@ -6,7 +6,7 @@ from openpyxl.styles import PatternFill, Alignment, Font, Border, Side
 from openpyxl import Workbook
 import csv
 
-st.title("🧬 DNA Shape Table Generator (with Sequence Info)")
+st.title("🧬 DNA ShapeR Excel Generator")
 
 uploaded_zip = st.file_uploader("Upload ZIP file containing `.txt` files (from DNAShapeR)", type=["zip"])
 uploaded_fasta = st.file_uploader("Upload the corresponding `.fasta` file", type=["fasta", "fa", "txt"])
