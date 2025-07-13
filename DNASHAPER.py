@@ -96,12 +96,6 @@ if uploaded_zip and uploaded_fasta:
     wb = Workbook()
     ws1 = wb.active
     ws1.title = "Combined Data"
-    ws_meta = wb.create_sheet("FASTA Meta")
-
-    # FASTA Meta Sheet
-    ws_meta.append(["Total Sequences", len(sequence_ids)])
-    ws_meta.append(["Example ID", sequence_ids[0]])
-    ws_meta.append(["Example Sequence", sequences[0][:100] + ("..." if len(sequences[0]) > 100 else "")])
 
     # Header rows
     ws1.cell(row=2, column=1, value="Sequence ID").fill = blue_fill
@@ -154,6 +148,38 @@ if uploaded_zip and uploaded_fasta:
                 if j == len(row) - 1:
                     cell.font = avg_font
         start_col += df.shape[1]
+    # Create new worksheet for only avg values
+    ws_avg = wb.create_sheet("Only Averages")
+
+    # Header
+    ws_avg.cell(row=1, column=1, value="Sequence ID").fill = blue_fill
+    ws_avg.cell(row=1, column=2, value="Sequence").fill = blue_fill
+    ws_avg.cell(row=1, column=1).alignment = center_align
+    ws_avg.cell(row=1, column=2).alignment = center_align
+    ws_avg.cell(row=1, column=1).font = bold_font
+    ws_avg.cell(row=1, column=2).font = bold_font
+
+    # Add avg column headers
+    avg_headers = list(dataframes.keys())
+    for col_idx, df_name in enumerate(avg_headers, start=3):
+        cell = ws_avg.cell(row=1, column=col_idx, value=f"avg({df_name})")
+        cell.fill = blue_fill
+        cell.font = avg_font
+        cell.alignment = center_align
+        cell.border = thin_border
+
+    # Fill data rows
+    for i in range(row_counts[0]):
+        ws_avg.cell(row=i + 2, column=1, value=sequence_ids[i]).font = bold_font
+        ws_avg.cell(row=i + 2, column=2, value=sequences[i]).font = bold_font
+        ws_avg.cell(row=i + 2, column=1).border = thin_border
+        ws_avg.cell(row=i + 2, column=2).border = thin_border
+
+        for col_idx, df in enumerate(dataframes.values(), start=3):
+            avg_val = df.iloc[i, -1]
+            cell = ws_avg.cell(row=i + 2, column=col_idx, value=avg_val)
+            cell.font = avg_font
+            cell.border = thin_border
 
     wb.save(output)
     output.seek(0)
