@@ -151,6 +151,7 @@ if uploaded_zip and uploaded_fasta:
     # Create new worksheet for only avg values
     ws_avg = wb.create_sheet("Only Averages")
 
+
     # Header
     ws_avg.cell(row=1, column=1, value="Sequence ID").fill = blue_fill
     ws_avg.cell(row=1, column=2, value="Sequence").fill = blue_fill
